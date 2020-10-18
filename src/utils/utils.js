@@ -64,14 +64,14 @@ const Utils = {
   botSpam: function (msg) {
     if (msg.guild) {
       let botspam = db.server.getSetting(msg.guild, "botspam");
-      if (botspam && botspam != msg.channel.id) {
+      if (botspam && botspam !== msg.channel.id) {
         msg
           .reply(
             `I've placed your results in <#${botspam}> to keep things nice and tidy in here. Hurry before they get cold!`
           )
           .then(Utils.clean)
           .catch();
-        return msg.guild.channels.get(botspam) || msg.channel;
+        return msg.guild.channels.cache.get(botspam) || msg.channel;
       }
     }
     return msg.channel;
