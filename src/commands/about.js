@@ -12,23 +12,23 @@ const Module = new Augur.Module()
         .setURL(Module.config.helpPage)
         .setThumbnail(msg.client.user.displayAvatarURL)
         .setTitle(msg.client.user.username + ": A Brawlhalla Utility Bot")
-        .addField("Author", "[@Gaiwecoor](https://twitter.com/gaiwecoor)", true)
+        .addField(
+          "Author",
+          "[@AntoGarand](https://twitter.com/antogarand)",
+          true
+        )
         .addField(
           "Help Page",
           `[${msg.client.user.username} About Page](${Module.config.helpPage})`,
           true
         )
-        .addField(
-          "Home Server",
-          `[VLS Bot Support](${Module.config.homeServer})`,
-          true
-        )
+        .addField("Home Server", `[BrawlDB](${Module.config.homeServer})`, true)
         .addField(
           "Invite Link",
           `[Bring ${msg.client.user.username} to your server](${Module.config.inviteLink})`,
           true
         )
-        .addField("Patreon", "[Patreon](https://www.patreon.com/gaiwecoor)");
+        .addField("Patreon", "[Patreon](https://www.patreon.com/BrawlDB)");
 
       msg.channel.send({ embed }).catch((e) => {
         if (
@@ -69,7 +69,7 @@ const Module = new Augur.Module()
     aliases: ["patreon", "support"],
     process: (msg) =>
       msg.channel.send(
-        `Power ${msg.client.user.username}'s maintenance and development and gain access to early features at <https://www.patreon.com/gaiwecoor>`
+        `Power ${msg.client.user.username}'s maintenance and development and gain access to early features at <https://www.patreon.com/BrawlDB>`
       ),
   });
 
