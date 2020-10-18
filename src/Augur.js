@@ -165,7 +165,7 @@ Handler.prototype.start = function () {
       console.log("Ready");
       console.log(
         Client.user.username +
-          (Client.shard ? ` Shard ${Client.shard.ids}` : "") +
+          (Client.shard ? ` Shard ${Client.shard.ids[0].toString()}` : "") +
           " is ready!"
       );
       console.log(

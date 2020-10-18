@@ -5,8 +5,8 @@ const Manager = new ShardingManager(process.cwd() + "/src/base.js", {
   token: config.token,
 });
 
-Manager.spawn(2);
-Manager.on("launch", (shard) => {
+Manager.spawn("auto");
+Manager.on("shardCreate", (shard) => {
   console.log("Launched Shard", shard.id);
 });
 
