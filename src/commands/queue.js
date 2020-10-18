@@ -47,7 +47,7 @@ function checkBoard(msg, region, board = "1v1") {
               true
             );
           });
-        if (embed.fields.length == 0)
+        if (embed.fields.length === 0)
           embed.setDescription(
             `No Top ${
               pages * 50
@@ -102,7 +102,7 @@ const Module = new Augur.Module()
   })
   .setClockwork(() => {
     let shard = Module.handler.client.shard;
-    if (!shard || shard.id === 0) {
+    if (!shard || shard.ids[0] === 0) {
       let bh = require("brawlhalla-api")(Module.config.api.bh);
       let i = 0,
         refresh = 6 * 60000,

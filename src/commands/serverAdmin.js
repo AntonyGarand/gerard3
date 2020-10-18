@@ -66,8 +66,9 @@ function oldSettings(msg, suffix) {
       if (value == "here") {
         channel = msg.channel.id;
       } else {
-        channel = msg.guild.channels.find((c) => c.name.toLowerCase() == value)
-          .id;
+        channel = msg.guild.channels.cache.find(
+          (c) => c.name.toLowerCase() == value
+        ).id;
       }
     }
 
@@ -76,8 +77,8 @@ function oldSettings(msg, suffix) {
       if (
         channel &&
         !(
-          msg.guild.channels.get(channel) &&
-          msg.guild.channels
+          msg.guild.channels.cache.get(channel) &&
+          msg.guild.channels.cache
             .get(channel)
             .permissionsFor(msg.client.user)
             .has(["VIEW_CHANNEL", "SEND_MESSAGES"])
@@ -149,8 +150,9 @@ function oldSettings(msg, suffix) {
       if (value == "here") {
         channel = msg.channel.id;
       } else {
-        channel = msg.guild.channels.find((c) => c.name.toLowerCase() == value)
-          .id;
+        channel = msg.guild.channels.cache.find(
+          (c) => c.name.toLowerCase() == value
+        ).id;
       }
     }
 
@@ -159,8 +161,8 @@ function oldSettings(msg, suffix) {
       if (
         channel &&
         !(
-          msg.guild.channels.get(channel) &&
-          msg.guild.channels
+          msg.guild.channels.cache.get(channel) &&
+          msg.guild.channels.cache
             .get(channel)
             .permissionsFor(msg.client.user)
             .has(["VIEW_CHANNEL", "SEND_MESSAGES"])

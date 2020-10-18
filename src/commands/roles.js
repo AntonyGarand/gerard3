@@ -97,7 +97,9 @@ async function roleMe(member, msg = null) {
 function canManage(msg) {
   if (
     msg.guild &&
-    msg.guild.members.get(msg.client.user.id).permissions.has("MANAGE_ROLES")
+    msg.guild.members.cache
+      .get(msg.client.user.id)
+      .permissions.has("MANAGE_ROLES")
   ) {
     let settings = Module.db.server.getSettings(msg.guild.id);
     if (
@@ -165,7 +167,7 @@ const Module = new Augur.Module()
             );
 
             // Add the role to members
-            let updates = guild.members.filter(
+            let updates = guild.members.cache.filter(
               (m) => users.includes(m.id) || m.roles.has(settings.clanRole)
             );
             let call = 0;

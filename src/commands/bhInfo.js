@@ -16,8 +16,8 @@ async function announce(item) {
     const servers = await Module.db.server.announceChannels();
     const client = Module.handler.client;
     const channels = servers
-      .filter((s) => client.channels.has(s.announce))
-      .map((s) => client.channels.get(s.announce));
+      .filter((s) => client.channels.cache.has(s.announce))
+      .map((s) => client.channels.cache.get(s.announce));
 
     for (let i = 0; i < channels.length; i++) {
       setTimeout(
@@ -40,21 +40,26 @@ async function checkNews() {
     const client = Module.handler.client;
     const fs = require("fs");
     const file = process.cwd() + "/data/news.json";
+    if (!fs.existsSync(file)) {
+      fs.writeFileSync(file, "[]");
+    }
     let oldNews = JSON.parse(fs.readFileSync(file, "utf-8"));
 
     let item = await fetchFeed();
     let itemId = item.guid[0]._.substr(item.guid[0]._.indexOf("p=") + 2);
     if (!oldNews.includes(itemId)) {
       oldNews.push(itemId);
-      if (client.shard)
+      if (client.shard) {
         await client.shard.broadcastEval(
           `this.emit("newsUpdate", ${JSON.stringify(item)})`
         );
-      else client.emit("newsUpdate", item);
+      } else {
+        client.emit("newsUpdate", item);
+      }
       fs.writeFileSync(file, JSON.stringify(oldNews));
     }
   } catch (e) {
-    //u.alertError(e, "Check News");
+    u.alertError(e, "Check News");
   }
 }
 
@@ -392,7 +397,10 @@ const Module = new Augur.Module()
   })
   .addEvent("newsUpdate", announce)
   .setClockwork(() => {
-    if (!Module.handler.client.shard || Module.handler.client.shard.id === 0) {
+    if (
+      !Module.handler.client.shard ||
+      Module.handler.client.shard.ids[0] === 0
+    ) {
       checkNews();
       return setInterval(checkNews, 3600000);
     }

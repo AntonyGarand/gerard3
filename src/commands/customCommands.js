@@ -32,7 +32,7 @@ function runCustomCommand(msg) {
     let prefix = u.prefix(msg);
     prefix = prefix.replace(
       /<@!?\d+>/g,
-      `@${msg.guild.members.get(msg.client.user.id).displayName} `
+      `@${msg.guild.members.cache.get(msg.client.user.id).displayName} `
     );
 
     let list = Array.from(customCommands.get(msg.guild.id).values())
