@@ -26,7 +26,7 @@ async function roleMe(member, msg = null) {
             if (
               ranked.region.toLowerCase() == region.toLowerCase() &&
               regionRoles[i] &&
-              guild.roles.has(regionRoles[i])
+              guild.roles.cache.has(regionRoles[i])
             )
               roles.push(regionRoles[i]);
           });
@@ -47,7 +47,7 @@ async function roleMe(member, msg = null) {
             if (
               ranked.tier.toLowerCase().startsWith(rank) &&
               rankedRoles[i] &&
-              guild.roles.has(rankedRoles[i])
+              guild.roles.cache.has(rankedRoles[i])
             )
               roles.push(rankedRoles[i]);
           });
@@ -73,11 +73,11 @@ async function roleMe(member, msg = null) {
           .filter(
             (r, i, a) =>
               !roles.includes(r) &&
-              member.roles.has(r) &&
+              member.roles.cache.has(r) &&
               i === a.indexOf(r) &&
-              member.guild.roles.has(r)
+              member.guild.roles.cache.has(r)
           );
-        roles = roles.filter((r) => !member.roles.has(r));
+        roles = roles.filter((r) => !member.roles.cache.has(r));
 
         for (let i = 0; i < roles.length; i++) await member.roles.add(roles[i]);
         for (let i = 0; i < removeRoles.length; i++)
@@ -135,7 +135,7 @@ const Module = new Augur.Module()
       );
       let roles = []
         .concat(clanRole, regionRoles, rankedRoles)
-        .filter((r) => msg.member.roles.has(r));
+        .filter((r) => msg.member.roles.cache.has(r));
       msg.member.roles.remove(roles);
       msg.react("👌");
       u.clean(msg);
@@ -154,7 +154,7 @@ const Module = new Augur.Module()
         const settings = Module.db.server.getSettings(msg.guild.id);
         if (
           settings.clanRole &&
-          msg.guild.roles.has(settings.clanRole) &&
+          msg.guild.roles.cache.has(settings.clanRole) &&
           settings.clanId
         ) {
           const bh = require("brawlhalla-api")(Module.config.api.bh);
@@ -169,7 +169,8 @@ const Module = new Augur.Module()
 
             // Add the role to members
             let updates = guild.members.cache.filter(
-              (m) => users.includes(m.id) || m.roles.has(settings.clanRole)
+              (m) =>
+                users.includes(m.id) || m.roles.cache.has(settings.clanRole)
             );
             let call = 0;
             let fns = [null, "addRole", "removeRole", null];
@@ -177,7 +178,7 @@ const Module = new Augur.Module()
             for (let [key, member] of updates) {
               let state = 0;
               if (users.includes(member.id)) state += 1;
-              if (member.roles.has(settings.clanRole)) state += 2;
+              if (member.roles.cache.has(settings.clanRole)) state += 2;
 
               if (fns[state]) {
                 setTimeout(
