@@ -9,7 +9,8 @@
   "scripts": {
     "run": "index.js",
     "dev": "nodemon index.js",
-    "shard": "nodemon src/shard.js",
+    "shard": "node src/shard.js",
+    "shard:dev": "nodemon --ignore data/ src/shard.js",
     "site": "site/index.js",
     "site:dev": "nodemon site/index.js"
   },

@@ -61,9 +61,10 @@ async function roleMe(member, msg = null) {
         stats.clan.clan_id &&
         clanRole &&
         clanId == stats.clan.clan_id &&
-        guild.roles.has(clanRole)
-      )
+        guild.roles.cache.has(clanRole)
+      ) {
         roles.push(clanRole);
+      }
 
       // Apply
       if (roles.length > 0) {
@@ -73,7 +74,7 @@ async function roleMe(member, msg = null) {
             (r, i, a) =>
               !roles.includes(r) &&
               member.roles.has(r) &&
-              i == a.indexOf(r) &&
+              i === a.indexOf(r) &&
               member.guild.roles.has(r)
           );
         roles = roles.filter((r) => !member.roles.has(r));
@@ -135,7 +136,7 @@ const Module = new Augur.Module()
       let roles = []
         .concat(clanRole, regionRoles, rankedRoles)
         .filter((r) => msg.member.roles.has(r));
-      msg.member.removeRoles(roles);
+      msg.member.roles.remove(roles);
       msg.react("👌");
       u.clean(msg);
     },

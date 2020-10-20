@@ -12,8 +12,10 @@ async function announce(item) {
   try {
     if (typeof item == "string") item = JSON.parse(item);
 
-    const embed = await feedEmbed(item);
-    const servers = await Module.db.server.announceChannels();
+    const embed = await feedEmbed(item).catch(console.error);
+    const servers = await Module.db.server
+      .announceChannels()
+      .catch(console.error);
     const client = Module.handler.client;
     const channels = servers
       .filter((s) => client.channels.cache.has(s.announce))
@@ -49,6 +51,7 @@ async function checkNews() {
     let itemId = item.guid[0]._.substr(item.guid[0]._.indexOf("p=") + 2);
     if (!oldNews.includes(itemId)) {
       oldNews.push(itemId);
+      console.log("Send news");
       if (client.shard) {
         await client.shard.broadcastEval(
           `this.emit("newsUpdate", ${JSON.stringify(item)})`
@@ -217,7 +220,9 @@ const Module = new Augur.Module()
       try {
         let item = await fetchFeed("community");
         let embed = await feedEmbed(item);
-        msg.channel.send({ embed });
+        msg.channel
+          .send({ embed })
+          .catch((e) => u.alertError(e, "Sending community"));
       } catch (e) {
         u.alertError(e, msg);
       }

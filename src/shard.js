@@ -1,3 +1,7 @@
+process.on("unhandledRejection", (reason, p) => {
+  console.log("Unhandled Rejection at: Promise", p, "reason:", reason);
+});
+
 const { ShardingManager } = require("discord.js");
 const config = require("./config/config.json");
 
