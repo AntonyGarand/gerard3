@@ -13,7 +13,7 @@ const Module = new Augur.Module().addCommand({
     let prefix = await u.prefix(msg);
     let commands = Module.handler.commands.filter((c) => c.permissions(msg));
 
-    let embed = u.embed().setThumbnail(msg.client.user.displayAvatarURL);
+    let embed = u.embed().setThumbnail(msg.client.user.displayAvatarURL());
 
     if (!suffix) {
       // FULL HELP
@@ -31,9 +31,9 @@ const Module = new Augur.Module().addCommand({
       }
 
       let categories = commands
-        .filter((c) => !c.hidden && c.category != "General")
+        .filter((c) => !c.hidden && c.category !== "General")
         .map((c) => c.category)
-        .reduce((a, c, i, all) => (all.indexOf(c) == i ? a.concat(c) : a), [])
+        .reduce((a, c, i, all) => (all.indexOf(c) === i ? a.concat(c) : a), [])
         .sort();
 
       categories.unshift("General");
@@ -41,7 +41,7 @@ const Module = new Augur.Module().addCommand({
       let i = 1;
       categories.forEach((category) => {
         commands
-          .filter((c) => c.category == category && !c.hidden)
+          .filter((c) => c.category === category && !c.hidden)
           .sort((a, b) => a.name.localeCompare(b.name))
           .forEach((command) => {
             embed.addField(
@@ -49,7 +49,7 @@ const Module = new Augur.Module().addCommand({
               command.description ? command.description : "Description",
               true
             );
-            if (i == 20) {
+            if (i === 20) {
               msg.author.send({ embed: embed }).catch(console.error);
               embed = u
                 .embed()

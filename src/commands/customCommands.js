@@ -20,7 +20,7 @@ function runCustomCommand(msg) {
     return true;
   } else if (
     cmd &&
-    cmd.command == "help" &&
+    cmd.command === "help" &&
     customCommands.get(msg.guild.id).size > 0 &&
     !cmd.suffix
   ) {
@@ -40,7 +40,7 @@ function runCustomCommand(msg) {
       .sort();
 
     embed.setDescription(list.join("\n"));
-    msg.author.send({ embed });
+    msg.author.send({ embed }).catch((e) => u.alertError(e, msg));
   }
 }
 

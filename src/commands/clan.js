@@ -43,7 +43,7 @@ function clanSort(a, b) {
     Member: 1,
     Recruit: 0,
   };
-  if (a.rank == b.rank) return b.xp - a.xp;
+  if (a.rank === b.rank) return b.xp - a.xp;
   else return ranks[b.rank] - ranks[a.rank];
 }
 
@@ -65,7 +65,7 @@ const Module = new Augur.Module().addCommand({
       if (
         user &&
         user.bhid &&
-        (user.public || user.discordId == msg.author.id)
+        (user.public || user.discordId === msg.author.id)
       ) {
         let stats = await bh.getPlayerStats(user.bhid);
         if (stats && stats.clan) {

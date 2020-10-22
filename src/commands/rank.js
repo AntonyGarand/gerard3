@@ -7,7 +7,6 @@ const Augur = require("../Augur"),
   {
     GetGloryFromWins,
     GetGloryFromBestRating,
-    GetHeroEloFromOldElo,
     GetPersonalEloFromOldElo,
     bestRating,
   } = require("../utils/glory");
@@ -19,25 +18,25 @@ async function awaitNav(msg) {
 
     if (
       msg.channel &&
-      ((msg.channel.type == "text" &&
+      ((msg.channel.type === "text" &&
         msg.channel.permissionsFor(msg.client.user).has("ADD_REACTIONS")) ||
-        msg.channel.type == "dm")
+        msg.channel.type === "dm")
     ) {
       await msg.react(nav[0]);
       await msg.react(nav[1]);
     }
 
     let reactions = await msg.awaitReactions(
-      (reaction, u) => u.id == user && nav.includes(reaction.emoji.name),
+      (reaction, u) => u.id === user && nav.includes(reaction.emoji.name),
       { max: 1, time: time }
     );
 
-    if (reactions.size == 0) {
+    if (reactions.size === 0) {
       // Timeout. Clear reaction seeds.
       if (
-        (msg.channel.type == "text" &&
+        (msg.channel.type === "text" &&
           msg.channel.permissionsFor(msg.client.user).has("ADD_REACTIONS")) ||
-        msg.channel.tyle == "dm"
+        msg.channel.type === "dm"
       ) {
         if (msg.reactions.cache.has(nav[0]))
           msg.reactions.cache.get(nav[0]).remove(msg.client.user.id);
@@ -275,7 +274,7 @@ function statEmbed(stats) {
     this.addStats = (legend) => {
       ["one", "two"].forEach((i) => {
         if (
-          bh.legendSummaries.get(legend.legend_id)[`weapon_${i}`] == self.name
+          bh.legendSummaries.get(legend.legend_id)[`weapon_${i}`] === self.name
         ) {
           self.wins += legend.wins;
           self.games += legend.games;
@@ -299,10 +298,10 @@ function statEmbed(stats) {
     let legendSummary = bh.legendSummaries.get(legend.legend_id);
     if (legendSummary) {
       weaponStats
-        .find((w) => w.name == legendSummary.weapon_one)
+        .find((w) => w.name === legendSummary.weapon_one)
         .addStats(legend);
       weaponStats
-        .find((w) => w.name == legendSummary.weapon_two)
+        .find((w) => w.name === legendSummary.weapon_two)
         .addStats(legend);
     }
   });
@@ -320,12 +319,12 @@ function statEmbed(stats) {
     let legend = stats.legends
       .filter((l) => l.games > 20)
       .sort((a, b) =>
-        a[stat] == b[stat] ? b.time - a.time : (a[stat] - b[stat]) * sort[stat]
+        a[stat] === b[stat] ? b.time - a.time : (a[stat] - b[stat]) * sort[stat]
       )[0];
     let weapon = weaponStats
-      .filter((w) => w.timeheld != 0 && w.games > 20)
+      .filter((w) => w.timeheld !== 0 && w.games > 20)
       .sort((a, b) =>
-        a[stat]() == b[stat]()
+        a[stat]() === b[stat]()
           ? b.time() - a.time()
           : (a[stat]() - b[stat]()) * sort[stat]
       )[0];
@@ -499,7 +498,7 @@ const Module = new Augur.Module()
           if (
             user &&
             user.bhid &&
-            (user.discordId == msg.author.id || user.public)
+            (user.discordId === msg.author.id || user.public)
           ) {
             let rank = await bh.getPlayerRanked(user.bhid);
             let stats = await bh.getPlayerStats(user.bhid);
@@ -510,7 +509,7 @@ const Module = new Augur.Module()
                 name: u.decode(rank.name),
               });
               let leaderrank = leaderboard.find(
-                (l) => l.brawlhalla_id == rank.brawlhalla_id
+                (l) => l.brawlhalla_id === rank.brawlhalla_id
               );
               if (leaderrank) rank.global_rank = leaderrank.rank;
               if (stats.clan && stats.clan.clan_name) rank.clan = stats.clan;
@@ -527,7 +526,7 @@ const Module = new Augur.Module()
               // User has a bad bhid linked.
               msg
                 .reply(
-                  target.id == msg.author.id
+                  target.id === msg.author.id
                     ? "it looks like you may have `claim`ed the wrong Brawlhalla ID. Please verify the correct ID!"
                     : "it looks like that user may have `claim`ed the wrong Brawlhalla ID."
                 )
@@ -560,7 +559,7 @@ const Module = new Augur.Module()
           // Search by name
           let results = await bh.getRankings({ name: suffix });
           results = results.filter(
-            (r) => u.decode(r.name).toLowerCase() == suffix.toLowerCase()
+            (r) => u.decode(r.name).toLowerCase() === suffix.toLowerCase()
           );
 
           console.debug(results.length);
@@ -632,7 +631,7 @@ const Module = new Augur.Module()
               name: u.decode(rank.name),
             });
             let leaderrank = leaderboard.find(
-              (l) => l.brawlhalla_id == rank.brawlhalla_id
+              (l) => l.brawlhalla_id === rank.brawlhalla_id
             );
             if (leaderrank) rank.global_rank = leaderrank.rank;
             if (stats.clan && stats.clan.clan_name) rank.clan = stats.clan;
@@ -647,7 +646,7 @@ const Module = new Augur.Module()
             // User has a bad bhid linked.
             msg
               .reply(
-                target.id == msg.author.id
+                target.id === msg.author.id
                   ? "it looks like you may have `claim`ed the wrong Brawlhalla ID. Please verify the correct ID!"
                   : "it looks like that user may have `claim`ed the wrong Brawlhalla ID."
               )
@@ -698,7 +697,7 @@ const Module = new Augur.Module()
           if (
             user &&
             user.bhid &&
-            (user.discordId == msg.author.id || user.public)
+            (user.discordId === msg.author.id || user.public)
           ) {
             let stats = await bh.getPlayerStats(user.bhid);
             if (stats.brawlhalla_id) {
@@ -710,7 +709,7 @@ const Module = new Augur.Module()
               // User has a bad bhid linked.
               msg
                 .reply(
-                  target.id == msg.author.id
+                  target.id === msg.author.id
                     ? "it looks like you may have `claim`ed the wrong Brawlhalla ID. Please verify the correct ID!"
                     : "it looks like that user may have `claim`ed the wrong Brawlhalla ID."
                 )
@@ -719,7 +718,7 @@ const Module = new Augur.Module()
             }
           } else if (user && user.bhid) {
             msg.reply("that user's profile is not public.").then(u.clean);
-          } else if (target.id == msg.author.id) {
+          } else if (target.id === msg.author.id) {
             msg.reply("you need to `claim` your profile first.").then(u.clean);
           } else {
             msg

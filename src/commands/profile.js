@@ -31,7 +31,7 @@ const Module = new Augur.Module()
     process: async (msg, suffix) => {
       try {
         let state =
-          suffix.toLowerCase() == "off" || suffix.toLowerCase() == "false"
+          suffix.toLowerCase() === "off" || suffix.toLowerCase() === "false"
             ? "true"
             : "false";
 
@@ -65,11 +65,11 @@ const Module = new Augur.Module()
                 name: msg.member ? msg.member.displayName : msg.author.username,
                 link: "https://steamcommunity.com/profile/" + user.steamId,
               };
-              if (!error && response.statusCode == 200) {
+              if (!error && response.statusCode === 200) {
                 parseXML(body, (err, xml) => {
                   if (!err && xml.profile && xml.profile.steamID64) {
                     let profile = xml.profile;
-                    if (profile.customURL && profile.customURL[0] != "")
+                    if (profile.customURL && profile.customURL[0] !== "")
                       info.link =
                         "https://steamcommunity.com/id/" + profile.customURL[0];
                     msg.channel.send(

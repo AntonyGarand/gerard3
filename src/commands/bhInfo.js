@@ -86,7 +86,7 @@ async function feedEmbed(item) {
       embed.setURL(item.link[0]);
     }
 
-    if (img) embed.setThumbnail($('meta[property="og:image"]').attr("content"));
+    if (img) embed.setThumbnail(img.attr("content"));
   } catch (e) {
     u.alertError(e, "News Feed Embed");
   }
@@ -125,7 +125,7 @@ function legendEmbed(legend, full = false) {
   let slug = legend.legend_name_key.replace(" ", "_");
 
   let quotes = `${legend.bio_quote}\n  *${legend.bio_quote_about_attrib}*\n\n${legend.bio_quote_from}\n  *${legend.bio_quote_from_attrib}*`.replace(
-    /\"/g,
+    /"/g,
     ""
   );
 
@@ -164,31 +164,39 @@ async function loadBio(msg, legend) {
   try {
     if (
       msg.channel &&
-      ((msg.channel.type == "text" &&
+      ((msg.channel.type === "text" &&
         msg.channel.permissionsFor(msg.client.user).has("ADD_REACTIONS")) ||
-        msg.channel.type == "dm")
+        msg.channel.type === "dm")
     )
       await msg.react("➕");
 
     let reactions = await msg.awaitReactions(
-      (reaction, user) => reaction.emoji.name == "➕" && !user.bot,
+      (reaction, user) => reaction.emoji.name === "➕" && !user.bot,
       { max: 1, time: expandDuration * 60000 }
     );
 
     if (reactions.size > 0) {
       let embed = legendEmbed(legend, true);
-      let m = await msg.edit(embed);
+      await msg.edit(embed);
 
       if (
-        msg.channel.type == "text" &&
+        msg.channel.type === "text" &&
         msg.channel.permissionsFor(msg.client.user).has("MANAGE_MESSAGES")
       ) {
-        await msg.clearReactions();
+        await msg.reactions.removeAll();
       } else if (msg.reactions.cache.has("➕")) {
-        msg.reactions.cache.get("➕").remove(msg.client.user.id);
+        msg.reactions.cache
+          .filter((reaction) => reaction.users.cache.has(msg.client.user.id))
+          .get("➕")
+          .remove()
+          .catch((e) => u.alertError(e, "Removing reaction from message"));
       }
     } else if (msg.reactions.cache.has("➕")) {
-      msg.reactions.cache.get("➕").remove(msg.client.user.id);
+      msg.reactions.cache
+        .filter((reaction) => reaction.users.cache.has(msg.client.user.id))
+        .get("➕")
+        .remove()
+        .catch((e) => u.alertError(e, "Removing reaction from message"));
     }
   } catch (e) {
     if (
@@ -243,7 +251,9 @@ const Module = new Augur.Module()
             let channel = u.botSpam(msg);
 
             let m = await channel.send({ embed });
-            loadBio(m, legend);
+            loadBio(m, legend).catch((e) =>
+              u.alertError(e, "Updating legend bio")
+            );
           } else msg.reply("I couldn't find that legend.").then(u.clean);
         } else
           msg
@@ -301,7 +311,7 @@ const Module = new Augur.Module()
           }.brawlhalla.com`
         );
       } else {
-        for (region in bh.regions) {
+        for (region of bh.regions) {
           embed.addField(
             region.toUpperCase(),
             `ping -n 30 pingtest-${bh.regions[region]}.brawlhalla.com`
@@ -394,9 +404,9 @@ const Module = new Augur.Module()
     process: (msg) => {
       if (!msg.client.shard) updateLegends(Module.config.api.bh);
       else
-        msg.client.shard.broadcastEval(
-          `(${updateLegends})("${Module.config.api.bh}")`
-        );
+        msg.client.shard
+          .broadcastEval(`(${updateLegends})("${Module.config.api.bh}")`)
+          .catch((e) => u.alertError(e, "Update legends"));
     },
     permissions: (msg) => Module.config.adminId.includes(msg.author.id),
   })

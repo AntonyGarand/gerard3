@@ -37,7 +37,7 @@ async function reloadList(msg, game) {
       await msg.react("🔁");
 
     let reactions = await msg.awaitReactions(
-      (reaction, user) => reaction.emoji.name == "🔁" && !user.bot,
+      (reaction, user) => reaction.emoji.name === "🔁" && !user.bot,
       { max: 1, time: listDuration * 60000 }
     );
 
@@ -80,6 +80,7 @@ const Module = new Augur.Module().addCommand({
       u.clean(msg, listDuration * 60000);
       if (!suffix) suffix = "Brawlhalla";
 
+      // Todo: Figure out if this is actually useful?
       await msg.guild.fetchMembers();
 
       let embed = currentPlayers(msg, suffix);

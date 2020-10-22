@@ -97,15 +97,15 @@ Module = new Augur.Module()
         let tournaments = results.items.entities.tournament;
         let events = results.items.entities.event;
         events
-          .filter((e) => e.videogameId == 15)
+          .filter((e) => e.videogameId === 15)
           .filter((e) => e.startAt > Date.now() / 1000)
           .map((e) => e.tournamentId)
           .filter(
             (tid, i, e) =>
-              e.indexOf(tid) == i &&
-              tournaments.find((t) => t.id == tid).attendeeCount > 10
+              e.indexOf(tid) === i &&
+              tournaments.find((t) => t.id === tid).attendeeCount > 10
           )
-          .map((tid) => tournaments.find((t) => t.id == tid))
+          .map((tid) => tournaments.find((t) => t.id === tid))
           .sort((a, b) => a.startAt - b.startAt)
           .filter((e, i) => i < 25)
           .forEach((t) => {

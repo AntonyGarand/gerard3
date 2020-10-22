@@ -24,7 +24,7 @@ async function roleMe(member, msg = null) {
 
           regions.forEach((region, i) => {
             if (
-              ranked.region.toLowerCase() == region.toLowerCase() &&
+              ranked.region.toLowerCase() === region.toLowerCase() &&
               regionRoles[i] &&
               guild.roles.cache.has(regionRoles[i])
             )
@@ -60,7 +60,7 @@ async function roleMe(member, msg = null) {
         stats.clan &&
         stats.clan.clan_id &&
         clanRole &&
-        clanId == stats.clan.clan_id &&
+        clanId === stats.clan.clan_id &&
         guild.roles.cache.has(clanRole)
       ) {
         roles.push(clanRole);
@@ -175,7 +175,7 @@ const Module = new Augur.Module()
             let call = 0;
             let fns = [null, "addRole", "removeRole", null];
 
-            for (let [key, member] of updates) {
+            for (let [, member] of updates) {
               let state = 0;
               if (users.includes(member.id)) state += 1;
               if (member.roles.cache.has(settings.clanRole)) state += 2;
@@ -197,7 +197,7 @@ const Module = new Augur.Module()
 
             let m = await msg.channel.send(
               `Updating ${call} clan ${
-                call == 1 ? "role" : "roles"
+                call === 1 ? "role" : "roles"
               }. The process should be complete in approximately ${(
                 (call * 1.2) /
                 60
@@ -207,7 +207,7 @@ const Module = new Augur.Module()
               (m) => {
                 m.edit(
                   `Clan role update complete! ${call} ${
-                    call == 1 ? "role" : "roles"
+                    call === 1 ? "role" : "roles"
                   } updated.`
                 );
               },
@@ -230,7 +230,7 @@ const Module = new Augur.Module()
   .addEvent("guildMemberAdd", async (member) => {
     try {
       if (canManage({ guild: member.guild, client: member.client }))
-        roleMe(member);
+        roleMe(member).catch((e) => u.alertError(e, "Guild member add"));
     } catch (e) {
       u.alertError(e);
     }

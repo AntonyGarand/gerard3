@@ -10,7 +10,7 @@ const Module = new Augur.Module()
       let embed = u
         .embed()
         .setURL(Module.config.helpPage)
-        .setThumbnail(msg.client.user.displayAvatarURL)
+        .setThumbnail(msg.client.user.displayAvatarURL())
         .setTitle(msg.client.user.username + ": A Brawlhalla Utility Bot")
         .addField(
           "Author",

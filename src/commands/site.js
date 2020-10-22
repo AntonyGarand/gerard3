@@ -4,8 +4,7 @@ const Augur = require("../Augur"),
   config = require("../../src/config/site.json"),
   fs = require("fs"),
   path = require("path"),
-  session = require("express-session"),
-  steam = require("steam-login");
+  session = require("express-session");
 
 const app = new Express(),
   http = require("http").Server(app);
@@ -63,7 +62,10 @@ const Module = new Augur.Module()
     }
   })
   .setUnload(() => {
-    if (!Module.handler.client.shard || Module.handler.client.shard.ids == 0) {
+    if (
+      !Module.handler.client.shard ||
+      Module.handler.client.shard.ids[0] === 0
+    ) {
       http.close();
 
       let routerPath = path.resolve(process.cwd(), "./site/private");

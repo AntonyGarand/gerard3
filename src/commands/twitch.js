@@ -140,7 +140,7 @@ const Module = new Augur.Module()
             .setDescription("Top five live Brawlhalla streams:");
 
           streams.data
-            .filter((s) => s._data.game_id == "460316")
+            .filter((s) => s._data.game_id === "460316")
             .sort((a, b) => b._data.viewer_count - a._data.viewer_count);
 
           let users = await twitch.api.users.getUsersByIds(
@@ -149,7 +149,7 @@ const Module = new Augur.Module()
 
           for (let i = 0; i < Math.min(streams.data.length, 5); i++) {
             let stream = streams.data[i]._data;
-            let user = users.find((u) => u._data.id == stream.user_id)._data;
+            let user = users.find((u) => u._data.id === stream.user_id)._data;
             embed.addField(
               user.display_name,
               `[${stream.title}](https://twitch.tv/${user.display_name}) (${stream.viewer_count} Viewers)`

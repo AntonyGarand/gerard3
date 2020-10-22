@@ -3,7 +3,6 @@ const Augur = require("../Augur"),
   {
     GetGloryFromWins,
     GetGloryFromBestRating,
-    GetHeroEloFromOldElo,
     GetPersonalEloFromOldElo,
     bestRating,
   } = require("../utils/glory");
@@ -24,7 +23,7 @@ const Module = new Augur.Module().addCommand({
       if (
         user &&
         user.bhid &&
-        (user.discordId == msg.author.id || user.public)
+        (user.discordId === msg.author.id || user.public)
       ) {
         let bh = require("brawlhalla-api")(Module.config.api.bh);
         let rank = await bh.getPlayerRanked(user.bhid);
@@ -75,7 +74,7 @@ const Module = new Augur.Module().addCommand({
           );
       } else if (user && user.bhid) {
         msg.reply("that user's profile is not public.").then(u.clean);
-      } else if (target.id != msg.author.id) {
+      } else if (target.id !== msg.author.id) {
         msg
           .reply(
             "that user needs to `claim` their account before I can estimate their Glory. Glory can also be calculated online, here: <http://www.brawlhalla.com/glory-calculator/>"
