@@ -39,10 +39,10 @@ async function awaitNav(msg) {
           msg.channel.permissionsFor(msg.client.user).has("ADD_REACTIONS")) ||
         msg.channel.tyle == "dm"
       ) {
-        if (msg.reactions.has(nav[0]))
-          msg.reactions.get(nav[0]).remove(msg.client.user.id);
-        if (msg.reactions.has(nav[1]))
-          msg.reactions.get(nav[1]).remove(msg.client.user.id);
+        if (msg.reactions.cache.has(nav[0]))
+          msg.reactions.cache.get(nav[0]).remove(msg.client.user.id);
+        if (msg.reactions.cache.has(nav[1]))
+          msg.reactions.cache.get(nav[1]).remove(msg.client.user.id);
       }
     } else {
       // Navigate and update.
@@ -446,10 +446,10 @@ async function updateRankedEmbed(msg) {
 
     let m = null;
     if (
-      channel.type == "text" &&
+      channel.type === "text" &&
       channel.permissionsFor(msg.client.user).has("MANAGE_MESSAGES")
     ) {
-      await msg.clearReactions();
+      await msg.reactions.removeAll();
       m = await msg.edit({ embed: rankedEmbed(rank, index, results.length) });
     } else {
       msg.delete();
@@ -549,7 +549,7 @@ const Module = new Augur.Module()
             });
           } else if (user && user.bhid) {
             msg.reply("that user's profile is not public.").then(u.clean);
-          } else if (target.id == msg.author.id) {
+          } else if (target.id === msg.author.id) {
             msg.reply("you need to `claim` your profile first.").then(u.clean);
           } else {
             msg
@@ -562,6 +562,8 @@ const Module = new Augur.Module()
           results = results.filter(
             (r) => u.decode(r.name).toLowerCase() == suffix.toLowerCase()
           );
+
+          console.debug(results.length);
 
           if (results.length > 0) {
             let result = results[0];

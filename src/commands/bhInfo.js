@@ -6,7 +6,7 @@ const Augur = require("../Augur"),
   bh = require("brawlhalla-api")(bh_key),
   u = require("../utils/utils");
 
-const expandDuration = 10;
+const expandDuration = 5;
 
 async function announce(item) {
   try {
@@ -184,11 +184,11 @@ async function loadBio(msg, legend) {
         msg.channel.permissionsFor(msg.client.user).has("MANAGE_MESSAGES")
       ) {
         await msg.clearReactions();
-      } else if (msg.reactions.has("➕")) {
-        msg.reactions.get("➕").remove(msg.client.user.id);
+      } else if (msg.reactions.cache.has("➕")) {
+        msg.reactions.cache.get("➕").remove(msg.client.user.id);
       }
-    } else if (msg.reactions.has("➕")) {
-      msg.reactions.get("➕").remove(msg.client.user.id);
+    } else if (msg.reactions.cache.has("➕")) {
+      msg.reactions.cache.get("➕").remove(msg.client.user.id);
     }
   } catch (e) {
     if (
