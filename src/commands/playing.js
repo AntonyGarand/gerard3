@@ -2,7 +2,7 @@ const Augur = require("../Augur"),
   u = require("../utils/utils"),
   listDuration = 10;
 
-function currentPlayers(msg, game) {
+async function currentPlayers(msg, game) {
   // List people playing the game
   let embed = u
     .embed()
@@ -11,7 +11,8 @@ function currentPlayers(msg, game) {
       `React with 🔁 within ${listDuration} minutes to update this list.`
     );
 
-  let players = msg.guild.members
+  const members = await msg.guild.members.fetch();
+  let players = members
     .filter(
       (u) =>
         !u.user.bot &&
@@ -42,11 +43,11 @@ async function reloadList(msg, game) {
     );
 
     if (reactions.size > 0) {
-      let embed = currentPlayers(msg, game);
+      let embed = await currentPlayers(msg, game);
       let m = null;
 
       if (msg.channel.permissionsFor(msg.client.user).has("MANAGE_MESSAGES")) {
-        await msg.clearReactions();
+        await msg.reactions.removeAll();
         m = await msg.edit(embed);
       } else {
         msg.delete();
@@ -80,10 +81,7 @@ const Module = new Augur.Module().addCommand({
       u.clean(msg, listDuration * 60000);
       if (!suffix) suffix = "Brawlhalla";
 
-      // Todo: Figure out if this is actually useful?
-      await msg.guild.fetchMembers();
-
-      let embed = currentPlayers(msg, suffix);
+      let embed = await currentPlayers(msg, suffix);
       let m = await u.botSpam(msg).send({ embed });
       reloadList(m, suffix);
     } catch (e) {
