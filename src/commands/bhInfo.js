@@ -311,7 +311,7 @@ const Module = new Augur.Module()
           }.brawlhalla.com`
         );
       } else {
-        for (region of bh.regions) {
+        for (let region of Object.keys(bh.regions)) {
           embed.addField(
             region.toUpperCase(),
             `ping -n 30 pingtest-${bh.regions[region]}.brawlhalla.com`
