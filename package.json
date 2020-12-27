@@ -5,7 +5,6 @@
   "license": "MIT",
   "homepage": "https://github.com/BrawlDB/gerard3",
   "description": "Brawlhalla Discord bot",
-  "type": "module",
   "main": "src/bot.js",
   "scripts": {
     "run": "index.js",
