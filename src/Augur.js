@@ -64,6 +64,7 @@ Handler.prototype.parse = async function (msg) {
     else {
       let message = msg.content;
       let prefix = this.config.prefix;
+      console.debug(prefix);
       let parse;
 
       if (msg.author.bot) parse = false;

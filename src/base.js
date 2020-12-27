@@ -2,6 +2,7 @@ const Augur = require("./Augur"),
   config = require("./config/config.json"),
   fs = require("fs"),
   path = require("path"),
+  Discord = require("discord.js"),
   u = require("./utils/utils");
 
 const disabledCommands = [];
@@ -23,6 +24,13 @@ const Handler = new Augur.Handler(config, {
   clientOptions: {
     disableEveryone: true,
     ws: {
+      // intents:
+      //   // for !wip, current members playing
+      //   Discord.Intents.PRIVILEGED |
+      //   // Refreching commands, misc
+      //   Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS |
+      //   Discord.Intents.FLAGS.DIRECT_MESSAGES |
+      //   Discord.Intents.FLAGS.
       // intents: 9474
     },
   },

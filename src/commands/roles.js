@@ -160,7 +160,7 @@ const Module = new Augur.Module()
           const bh = require("brawlhalla-api")(Module.config.api.bh);
           let clan = await bh.getClanStats(settings.clanId);
           if (clan && clan.clan && clan.clan.length > 0) {
-            let guild = await msg.guild.fetchMembers();
+            let guild = await msg.guild.members.fetch();
 
             let clanMembers = clan.clan.map((m) => m.brawlhalla_id);
             let users = (await Module.db.claim.getClanUsers(clanMembers)).map(
@@ -168,12 +168,12 @@ const Module = new Augur.Module()
             );
 
             // Add the role to members
-            let updates = guild.members.cache.filter(
+            let updates = msg.guild.members.cache.filter(
               (m) =>
                 users.includes(m.id) || m.roles.cache.has(settings.clanRole)
             );
             let call = 0;
-            let fns = [null, "addRole", "removeRole", null];
+            let fns = [null, "add", "remove", null];
 
             for (let [, member] of updates) {
               let state = 0;
@@ -183,7 +183,7 @@ const Module = new Augur.Module()
               if (fns[state]) {
                 setTimeout(
                   (member, fn, role) => {
-                    member[fn](role).catch((e) => {
+                    member.roles[fn](role).catch((e) => {
                       u.alertError(e, msg);
                     });
                   },

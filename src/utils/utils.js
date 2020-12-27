@@ -131,7 +131,7 @@ const Utils = {
   },
   prefix: function (msg) {
     try {
-      if (msg.guild && false) return db.server.getSetting(msg.guild, "prefix");
+      if (msg.guild) return db.server.getSetting(msg.guild, "prefix");
       else return config.prefix;
     } catch (e) {
       console.error(e);
