@@ -7,15 +7,10 @@
   "description": "Brawlhalla Discord bot",
   "main": "src/bot.js",
   "scripts": {
-    "run": "index.js",
-    "dev": "nodemon index.js",
-    "shard": "node src/shard.js",
-    "shard:dev": "nodemon --ignore data/ src/shard.js",
-    "site": "site/index.js",
-    "site:dev": "nodemon site/index.js"
+    "run": "ts-node index",
+    "dev": "nodemon"
   },
   "dependencies": {
-    "brawlhalla-api": "^4.0.5",
     "brawlhalla-api-ts": "^4.2.0",
     "discord-akairo": "^8.1.0",
     "discord.js": "^12.5.1",

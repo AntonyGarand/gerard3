@@ -10,6 +10,8 @@ class GerardClient extends AkairoClient {
   commandHandler = new CommandHandler(this, {
     directory: "./src/commands/",
     prefix: "!",
+    defaultCooldown: 1000,
+    ignoreCooldown: [],
   });
 
   constructor() {
@@ -22,10 +24,13 @@ class GerardClient extends AkairoClient {
       }
     );
 
+    logger.debug("Loading commands..");
     this.commandHandler.loadAll();
-    logger.debug('Loaded all commands!');
+    logger.debug("Loaded all commands!");
   }
 }
 
 const client = new GerardClient();
 client.login(process.env.DISCORD_TOKEN);
+
+logger.log("Gerard started!");
