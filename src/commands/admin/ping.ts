@@ -1,24 +1,34 @@
 import { Command } from "discord-akairo";
 import { Message } from "discord.js";
 
-class PingCommand extends Command {
+import { logger } from "@utils/logger";
+
+// @tslint: disable
+export default class extends Command {
+  ownerOnly = true;
+
   constructor() {
     super("ping", {
-      aliases: ["ping"],
+      aliases: ["ping", "pong", "trace"],
+      description: { content: "View latency" },
     });
   }
 
-  async exec(message: Message) {
-    const sent = await message.channel.send("Pinging...");
-    return sent.edit(
-      `Pong! Took ${
-        sent.createdTimestamp -
-        (message.editedTimestamp
-          ? message.editedTimestamp
-          : message.createdTimestamp)
-      }ms${message.client.shard ? " on shard " + message.client.shard.ids : ""}`
-    );
+  public async exec(message: Message) {
+    this.client.test();
+    try {
+      await message.util.send("Requesting...");
+      const estimatedPing =
+        message.util.lastResponse.createdTimestamp - message.createdTimestamp;
+      const roundInt = Math.round(estimatedPing / 50);
+
+      return message.util.edit([
+        `Po${"o".repeat(roundInt)}ng!`,
+        `\n:arrows_counterclockwise: Roundtrip: ${estimatedPing}ms`,
+        `:heart: ws: ${Math.round(this.client.ws.ping)}ms`,
+      ]);
+    } catch (err) {
+      logger.error(err);
+    }
   }
 }
-
-module.exports = PingCommand;

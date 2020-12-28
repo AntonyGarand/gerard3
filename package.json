@@ -7,7 +7,7 @@
   "description": "Brawlhalla Discord bot",
   "main": "src/bot.js",
   "scripts": {
-    "run": "ts-node index",
+    "run": "ts-node -r tsconfig-paths/register index",
     "dev": "nodemon"
   },
   "dependencies": {
@@ -23,7 +23,8 @@
     "husky": "^4.3.6",
     "nodemon": "^2.0.6",
     "prettier": "^2.2.1",
-    "pretty-quick": "^3.1.0"
+    "pretty-quick": "^3.1.0",
+    "tsconfig-paths": "^3.9.0"
   },
   "repository": {
     "type": "git",
