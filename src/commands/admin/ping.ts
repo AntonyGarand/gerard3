@@ -15,7 +15,6 @@ export default class extends Command {
   }
 
   public async exec(message: Message) {
-    this.client.test();
     try {
       await message.util.send("Requesting...");
       const estimatedPing =
