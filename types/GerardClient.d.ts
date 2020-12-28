@@ -1,5 +1,7 @@
+import { Logger } from "log4js";
+
 export interface IGerardClient {
-  test(): void;
+  logger: Logger;
 }
 
 declare module "discord-akairo" {

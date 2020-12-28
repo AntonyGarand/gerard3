@@ -31,9 +31,7 @@ export class GerardClient extends AkairoClient implements IGerardClient {
     },
   });
 
-  public test() {
-    console.log("Test!");
-  }
+  public logger = logger;
 
   constructor() {
     super(
