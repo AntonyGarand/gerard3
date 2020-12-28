@@ -28,6 +28,8 @@ export default class extends Command {
       ],
     });
 
+    this.titles.set("brawlhalla", "Brawlhalla features");
+    this.titles.set("general", "General features");
     this.titles.set("admin", "Administrative features");
     this.titles.set("server", "Server features");
     this.titles.set("util", "Utilities");
@@ -45,11 +47,7 @@ export default class extends Command {
     const examples: string[] = command.description.examples;
 
     const embed = new MessageEmbed()
-      .setTitle(
-        `${prefix}${command} ${
-          command.description.usage ? command.description.usage : ""
-        }`
-      )
+      .setTitle(`${prefix}${command} ${command.description.usage || ""}`)
       .setDescription(command.description.content);
 
     if (process.env.HOMEPAGE) {
@@ -137,7 +135,3 @@ export default class extends Command {
     return message.util.send(embed);
   }
 }
-
-// if (Module.config.homePage) {
-//   embed.setURL(Module.config.homePage + "commands");
-// }
