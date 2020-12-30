@@ -1,7 +1,6 @@
 import { Command } from "discord-akairo";
 import { Message, MessageEmbed } from "discord.js";
 
-import { logger } from "@utils/logger";
 import {
   BH_REGION_NICE_NAME,
   BRAWLHALLA_REGIONS,

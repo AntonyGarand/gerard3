@@ -5,6 +5,7 @@ import { Message } from "discord.js";
 
 import { logger } from "@utils/logger";
 import { IGerardClient } from "../types/GerardClient";
+import { bhidResolver } from "@utils/bhid";
 
 logger.debug("Starting Gerard!");
 
@@ -47,6 +48,10 @@ export class GerardClient extends AkairoClient implements IGerardClient {
     logger.debug("Loading commands..");
     this.commandHandler.loadAll();
     logger.debug("Loaded all commands!");
+    this.addBhidType();
+  }
+  public addBhidType() {
+    this.commandHandler.resolver.addType("bhid", bhidResolver);
   }
 }
 
