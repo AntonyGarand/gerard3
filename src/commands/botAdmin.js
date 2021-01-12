@@ -145,6 +145,8 @@ const Module = new Augur.Module()
         guilds = guilds.reduce((prev, val) => prev + val, 0);
         let channels = await bot.shard.fetchClientValues("channels.cache.size");
         channels = channels.reduce((prev, val) => prev + val, 0);
+        let members = await bot.shard.fetchClientValues("users.cache.size");
+        members = members.reduce((prev, val) => prev + val, 0);
         let mem = await bot.shard.broadcastEval(
           "Math.round(process.memoryUsage().rss / 1024 / 1000)"
         );
@@ -157,7 +159,7 @@ const Module = new Augur.Module()
           )
           .addField(
             "Total Bot Reach",
-            `${guilds} Servers\n${channels} Channels`,
+            `${guilds} Servers\n${channels} Channels\n${members} Members`,
             true
           )
           .addField(
@@ -180,6 +182,8 @@ const Module = new Augur.Module()
         msg.channel.send(embed);
       } else {
         let uptime = process.uptime();
+        const members = bot.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
+        members = members.reduce((prev, val) => prev + val, 0);
         embed
           .addField(
             "Uptime",
@@ -194,7 +198,7 @@ const Module = new Augur.Module()
           )
           .addField(
             "Reach",
-            `${bot.guilds.size} Servers\n${bot.channels.size} Channels\n${bot.users.size} Users`,
+            `${bot.guilds.cache.size} Servers\n${bot.channels.cache.size} Channels\n${bot.users.cache.size} Users`,
             true
           )
           .addField(
