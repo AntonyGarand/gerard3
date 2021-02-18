@@ -6,6 +6,8 @@ import { Message } from "discord.js";
 import { logger } from "@utils/logger";
 import { IGerardClient } from "../types/GerardClient";
 import { bhidResolver } from "@utils/bhid";
+import { Guild } from "./database/guild";
+import { db } from "./database";
 
 logger.debug("Starting Gerard!");
 
@@ -58,4 +60,22 @@ export class GerardClient extends AkairoClient implements IGerardClient {
 const client = new GerardClient();
 client.login(process.env.DISCORD_TOKEN);
 
-logger.log("Gerard started!");
+logger.info("Gerard started!");
+
+logger.info('Database test');
+(async ()=>{
+  logger.info(null,'Syncing model..');
+  await db.sync();
+  logger.info('Inserting sample guild..');
+  const newGuild = await Guild.create({
+    guildId: '1234',
+    name: 'fake guild',
+    botChannels: [],
+    autoRole: false,
+    roles: [],
+    adminRoles: [],
+    modRoles: [],
+    serverLanguage: 'en',
+  });
+  logger.info(newGuild.adminRoles);
+})()
